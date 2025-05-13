@@ -4,7 +4,7 @@ This repository contains scripts and notebooks used for the analysis of single-n
 
 ---
 
-## 📁 Table of Contents
+## Table of Contents
 
 - [Project Overview](#project-overview)
 - [Preprocessing & Clustering](#preprocessing--clustering)
@@ -17,7 +17,7 @@ This repository contains scripts and notebooks used for the analysis of single-n
 
 ---
 
-## 📘 Project Overview
+## Project Overview
 
 The AMP-PD pipeline integrates multiple downstream single-cell analyses, including:
 
@@ -30,7 +30,7 @@ The AMP-PD pipeline integrates multiple downstream single-cell analyses, includi
 
 ---
 
-## 🧪 Preprocessing & Clustering
+## Preprocessing & Clustering
 
 This script filters, normalizes, and integrates AMP-PD snRNA-seq data using Scanpy and Pegasus. It applies HVG selection, PCA, Harmony batch correction, and Leiden clustering.
 
@@ -42,7 +42,7 @@ python src/prepare_and_integrate_AMPPD.py
 
 ---
 
-## 🧬 GWAS Scoring with scDRS
+## GWAS Scoring with scDRS
 
 This script scores individual cells for Parkinson’s disease GWAS gene sets using the SCDRS method.
 
@@ -54,7 +54,7 @@ python src/score_gwas_scdrs.py
 
 ---
 
-## �� Cell Type Compositional Analysis
+## Cell Type Compositional Analysis
 
 This module uses `crumblr` to analyze changes in subclass-level cell type proportions across Braak stages and diagnosis groups using pseudobulk counts.
 
@@ -71,7 +71,7 @@ This module uses `crumblr` to analyze changes in subclass-level cell type propor
 
 ---
 
-## 🔬 Differential Expression with dreamlet
+## Differential Expression with dreamlet
 
 This script performs differential gene expression modeling across pseudobulk samples using `dreamlet`, adjusting for biological and technical covariates.
 
@@ -86,7 +86,7 @@ This script performs differential gene expression modeling across pseudobulk sam
 
 ---
 
-## 🧠 Variance Partitioning of Braak LB Pathology
+## Variance Partitioning of Braak LB Pathology
 
 This script quantifies sources of variation (biological and technical) in gene expression across AMP-PD samples using `dreamlet::fitVarPart()`.
 
@@ -98,7 +98,7 @@ Rscript scripts/variance_partition_braakLB_dreamlet.R
 
 ---
 
-## 🔥 Hotspot Analysis of Microglia/PVM Cells
+## Hotspot Analysis of Microglia/PVM Cells
 
 This script applies `Hotspot` to identify locally co-regulated gene modules within microglia/PVM cells.
 
@@ -117,14 +117,14 @@ python src/hotspot_micro_pvm.py
 
 ---
 
-## 🛠 Installation & Requirements
+## Installation & Requirements
 
 Most scripts require the following R and Python packages (via CRAN, Bioconductor, or pip):
 
 ### Python (pip)
 
 ```bash
-pip install scanpy pegasusio pegasuspy scdrs matplotlib seaborn pandas
+pip install scanpy pegasusio pegasuspy scdrs matplotlib seaborn pandas hotspotsc seaborn harmony anndata 
 ```
 
 ### R (Bioconductor + CRAN)
