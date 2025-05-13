@@ -60,7 +60,7 @@ This module uses `crumblr` to analyze changes in subclass-level cell type propor
 
 ### Script
 
-- `dreamlet_meta_analysis_and_visualization.R`
+- `cell_type_composition.R`
 
 ### Highlights
 
@@ -98,7 +98,7 @@ Rscript scripts/variance_partition_braakLB_dreamlet.R
 
 ---
 
-## Hotspot Analysis of Microglia/PVM Cells
+## Hotspot Analysis of Myeloid Cells
 
 This script applies `Hotspot` to identify locally co-regulated gene modules within microglia/PVM cells.
 
