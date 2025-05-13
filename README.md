@@ -1,108 +1,143 @@
-# AMP-PD
+# AMP-PD Single-Cell Analysis Pipeline
 
+This repository contains scripts and notebooks used for the analysis of single-nucleus RNA-sequencing (snRNA-seq) data in the AMP-PD cohort. The project includes data preprocessing, clustering, cell type composition modeling, GWAS scoring, differential expression, Hotspot module detection, and more — supporting our accompanying manuscript.
 
-This repository contains scripts and notebooks used for single-cell RNA-sequencing (scRNA-seq) analysis as part of our manuscript. It includes data preprocessing, clustering, differential expression, and downstream analyses.
+---
 
-## Table of Contents
+## 📁 Table of Contents
 
 - [Project Overview](#project-overview)
-- [Preprocessing & Clustering](#preprocess-cluster)
-- [scDRS Calculation](#scDRS)
-- [Cell-type Compositional Analysis](#crumblr)
-- [Differential Expression Analysis](#dreamlet) 
-- [Hotspot analysis](#hotspot)
-- [Cell-Cell Interactions](#CCIs)
+- [Preprocessing & Clustering](#preprocessing--clustering)
+- [GWAS Scoring with scDRS](#gwas-scoring-with-scdrs)
+- [Cell Type Compositional Analysis](#cell-type-compositional-analysis)
+- [Differential Expression with dreamlet](#differential-expression-with-dreamlet)
+- [Variance Partitioning](#variance-partitioning-of-braak-lb-pathology)
+- [Hotspot Module Detection](#hotspot-analysis-of-microgliapvm-cells)
 - [Installation & Requirements](#installation--requirements)
 
+---
 
+## 📘 Project Overview
 
-# GWAS Scoring with SCDRS
+The AMP-PD pipeline integrates multiple downstream single-cell analyses, including:
 
-This script scores single-cell transcriptomes using SCDRS for Parkinson’s disease gene sets.
+- Multilevel preprocessing (HVG, Harmony, Leiden)
+- GWAS gene-set scoring (scDRS)
+- Mixed model-based DE and variance partitioning (dreamlet)
+- Cell composition analysis via pseudobulk modeling (crumblr)
+- Hotspot-based gene module inference
+- Cell-cell interaction and downstream network inference
 
-## Run
+---
 
-```bash
-python src/score_gwas_scdrs.py
+## 🧪 Preprocessing & Clustering
 
+This script filters, normalizes, and integrates AMP-PD snRNA-seq data using Scanpy and Pegasus. It applies HVG selection, PCA, Harmony batch correction, and Leiden clustering.
 
-
-
-# AMP-PD Preprocessing Pipeline
-
-This script filters, normalizes, and integrates AMP-PD single-nucleus RNA-seq data.
-It applies HVG selection, PCA, Harmony batch correction, and Leiden clustering.
-
-## Steps
-
-- Subset to protein-coding autosomal genes
-- Select top HVGs using `scanpy` method
-- Regress out confounders, run Harmony integration
-- UMAP and clustering
-
-## Run
+### Run
 
 ```bash
 python src/prepare_and_integrate_AMPPD.py
+```
 
+---
 
+## 🧬 GWAS Scoring with scDRS
 
+This script scores individual cells for Parkinson’s disease GWAS gene sets using the SCDRS method.
 
+### Run
 
-# Variance Partitioning of Braak LB Pathology
+```bash
+python src/score_gwas_scdrs.py
+```
 
-This script models variance across AMP-PD single-cell RNA-seq data using `dreamlet`,
-focusing on Braak LB progression across cell classes.
+---
 
-## Steps
+## �� Cell Type Compositional Analysis
 
-- Loads AMP-PD `H5AD` file and donor metadata
-- Adds pathology and covariate annotations
-- Aggregates to pseudobulk by class and subject
-- Processes assays with `dreamlet` and fits variance partition model
+This module uses `crumblr` to analyze changes in subclass-level cell type proportions across Braak stages and diagnosis groups using pseudobulk counts.
 
-## Run
+### Script
+
+- `dreamlet_meta_analysis_and_visualization.R`
+
+### Highlights
+
+- Converts cell count matrices via `crumblr`
+- Runs mixed models with `dream` on cell proportions
+- Performs meta-analysis with `metafor`
+- Visualizes subclass shifts on hierarchical tree (`ggtree`)
+
+---
+
+## 🔬 Differential Expression with dreamlet
+
+This script performs differential gene expression modeling across pseudobulk samples using `dreamlet`, adjusting for biological and technical covariates.
+
+### Script
+
+- `dreamlet_differential_expression_PD.R`
+
+### Outputs
+
+- DE result tables (`.csv`)
+- Model objects (`.RData`)
+
+---
+
+## 🧠 Variance Partitioning of Braak LB Pathology
+
+This script quantifies sources of variation (biological and technical) in gene expression across AMP-PD samples using `dreamlet::fitVarPart()`.
+
+### Run
 
 ```bash
 Rscript scripts/variance_partition_braakLB_dreamlet.R
+```
 
+---
 
+## 🔥 Hotspot Analysis of Microglia/PVM Cells
 
+This script applies `Hotspot` to identify locally co-regulated gene modules within microglia/PVM cells.
 
-# DREAMlet-based Differential Expression in AMP-PD
+### Workflow
 
-This repository contains differential gene expression scripts using `dreamlet`
-on AMP-PD pseudobulk data. Models include core covariates and adjust for
-individual-level and technical variation.
+- Load Harmony-integrated AnnData file
+- Match with updated cell metadata
+- Run autocorrelation + module discovery
+- Export scores and modules
 
-## Scripts
-
-- `dreamlet_differential_expression_PD.R`: main DE script with 3 model variations
-
-## Dependencies
-
-See the top of the script for required R packages (Bioconductor + CRAN).
-
-## Output
-
-- `.csv`: differential expression results
-- `.RData`: model objects and formulas
-
-
-# Hotspot Analysis of Microglia/PVM Cells
-
-This script performs Hotspot module detection in AMP-PD microglia/PVM cells after
-batch correction with Harmony.
-
-## Workflow
-
-- Load processed AnnData file and updated metadata
-- Match and annotate cells
-- Filter genes and compute Hotspot autocorrelations
-- Derive modules and export scores
-
-## Run
+### Run
 
 ```bash
 python src/hotspot_micro_pvm.py
+```
 
+---
+
+## 🛠 Installation & Requirements
+
+Most scripts require the following R and Python packages (via CRAN, Bioconductor, or pip):
+
+### Python (pip)
+
+```bash
+pip install scanpy pegasusio pegasuspy scdrs matplotlib seaborn pandas
+```
+
+### R (Bioconductor + CRAN)
+
+```r
+# Bioconductor
+BiocManager::install(c(
+  "zellkonverter", "SingleCellExperiment", "dreamlet", "variancePartition",
+  "crumblr", "ggtree", "qvalue", "GSEABase", "BiocParallel"
+))
+
+# CRAN
+install.packages(c(
+  "ggplot2", "tidyverse", "aplot", "broom", "cowplot", "metafor", "reticulate"
+))
+```
