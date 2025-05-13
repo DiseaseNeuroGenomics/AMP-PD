@@ -1,17 +1,23 @@
 #!/usr/bin/env Rscript
 # ==========================================================
-# Script: dreamlet_meta_analysis_and_visualization.R
+# Script: cell_type_composition.R
 # Author: Tereza Clarence
 # Date:   2025-05-13
 #
 # Description:
 # ------------
-# This script runs multiple differential expression models using `dream` from
-# `variancePartition`, aggregates contrasts using meta-analysis with `metafor`,
-# and visualizes effect sizes across subclass-level cell types in AMP-PD data.
+# This script performs cell type compositional analysis on AMP-PD subclass-level
+# pseudobulk data using `crumblr`. It models changes in relative cell abundances
+# across diagnostic groups and Braak LB stages using linear mixed models via `dream`,
+# followed by fixed-effect meta-analysis (`metafor`) and visualization of subclass-level
+# differences using a hierarchical tree layout (`ggtree`).
+#
+#
+# Requirements:
+# - dreamlet, crumbler, metafor, ggtree, broom, tidyverse
 #
 # Output:
-# - Meta-analysis DE results per contrast
+# - Meta-analysis cell type composition results per contrast
 # - Annotated coefficient plots with phylogenetic cell tree
 #
 # Requirements:
