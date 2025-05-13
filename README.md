@@ -47,6 +47,28 @@ python src/prepare_and_integrate_AMPPD.py
 
 
 
+
+
+# Variance Partitioning of Braak LB Pathology
+
+This script models variance across AMP-PD single-cell RNA-seq data using `dreamlet`,
+focusing on Braak LB progression across cell classes.
+
+## Steps
+
+- Loads AMP-PD `H5AD` file and donor metadata
+- Adds pathology and covariate annotations
+- Aggregates to pseudobulk by class and subject
+- Processes assays with `dreamlet` and fits variance partition model
+
+## Run
+
+```bash
+Rscript scripts/variance_partition_braakLB_dreamlet.R
+
+
+
+
 # DREAMlet-based Differential Expression in AMP-PD
 
 This repository contains differential gene expression scripts using `dreamlet`
