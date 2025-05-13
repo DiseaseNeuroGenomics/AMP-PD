@@ -10,7 +10,7 @@ This repository contains scripts and notebooks used for single-cell RNA-sequenci
 - [scDRS Calculation](#scDRS)
 - [Cell-type Compositional Analysis](#crumblr)
 - [Differential Expression Analysis](#dreamlet)
-- [Pseudotime and Disease Progression](#pseudotime)
+- [Hotspot analysis](#hotspot)
 - [Cell-Cell Interactions](#CCIs)
 - [Installation & Requirements](#installation--requirements)
 - [Usage](#usage)
