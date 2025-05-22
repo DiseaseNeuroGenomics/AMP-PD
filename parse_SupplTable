@@ -1,0 +1,39 @@
+import pandas as pd
+from io import StringIO
+
+def load_multi_section_csv(filepath):
+    with open(filepath, "r") as f:
+        lines = f.readlines()
+
+    dataframes = {}
+    current_section = None
+    buffer = []
+
+    for line in lines:
+        if line.startswith("###"):
+            if current_section and buffer:
+                df = pd.read_csv(StringIO("".join(buffer)))
+                dataframes[current_section] = df
+                buffer = []
+            current_section = line.strip().replace("###", "").strip()
+        elif line.strip() == "":
+            continue
+        else:
+            buffer.append(line)
+
+    # Catch the last section
+    if current_section and buffer:
+        df = pd.read_csv(StringIO("".join(buffer)))
+        dataframes[current_section] = df
+
+    return dataframes
+
+
+
+df_dict = load_multi_section_csv("Supplementary_Table.csv")
+
+# List all sections
+print(df_dict.keys())
+
+# View a specific section
+df_dict[key].head()
