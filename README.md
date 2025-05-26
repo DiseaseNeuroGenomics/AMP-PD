@@ -117,6 +117,19 @@ python src/hotspot_micro_pvm.py
 
 ---
 
+
+## CCI calling
+
+This script allows to infer CCIs.
+
+### Run
+
+```bash
+python src/CCI.py
+```
+
+
+
 ## Installation & Requirements
 
 Most scripts require the following R and Python packages (via CRAN, Bioconductor, or pip):
