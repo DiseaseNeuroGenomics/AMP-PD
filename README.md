@@ -125,7 +125,7 @@ This script allows to infer CCIs.
 ### Run
 
 ```bash
-python src/CCI.py
+python src/run_cci_liana_example.py
 ```
 
 
