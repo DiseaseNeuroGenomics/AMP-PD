@@ -1,6 +1,6 @@
 # AMP-PD Single-Cell Analysis Pipeline
 
-This repository contains scripts and notebooks used for the analysis of single-nucleus RNA-sequencing (snRNA-seq) data in the AMP-PD cohort. The project includes data preprocessing, clustering, cell type composition modeling, GWAS scoring, differential expression, Hotspot module detection, and more — supporting our accompanying manuscript.
+This repository contains scripts and notebooks used for the analysis of single-nucleus RNA-sequencing (snRNA-seq) data in the AMP-PD cohort. The project includes data preprocessing, clustering, cell type composition modeling, GWAS scoring, differential expression, TF inference, Hotspot module detection, and more — supporting our accompanying manuscript.
 
 ---
 
@@ -11,28 +11,32 @@ This repository contains scripts and notebooks used for the analysis of single-n
 - [GWAS Scoring with scDRS](#gwas-scoring-with-scdrs)
 - [Cell Type Compositional Analysis](#cell-type-compositional-analysis)
 - [Differential Expression with dreamlet](#differential-expression-with-dreamlet)
-- [Variance Partitioning](#variance-partitioning-of-braak-lb-pathology)
-- [Hotspot Module Detection](#hotspot-analysis-of-microgliapvm-cells)
+- [Variance Partitioning](#variance-partitioning)
+- [Hotspot Module Detection](#hotspot-module-detection)
+- [TF Activity Inference](#tf-activity-inference)
+- [Cell-Cell Interaction Inference](#cell-cell-interaction-inference)
 - [Installation & Requirements](#installation--requirements)
 
 ---
 
 ## Project Overview
 
-The AMP-PD pipeline integrates multiple downstream single-cell analyses, including:
+This pipeline supports the full spectrum of single-cell and pseudobulk-level analyses in the AMP-PD dataset. Modules include:
 
-- Multilevel preprocessing (HVG, Harmony, Leiden)
-- GWAS gene-set scoring (scDRS)
-- Mixed model-based DE and variance partitioning (dreamlet)
-- Cell composition analysis via pseudobulk modeling (crumblr)
-- Hotspot-based gene module inference
-- Cell-cell interaction and downstream network inference
+- Multistage data preprocessing, QC, and integration (Scanpy + Harmony)
+- Cell-type proportion modeling across clinical groups (crumblr + dream)
+- GWAS signal scoring with scDRS
+- Differential expression via dreamlet with hierarchical covariates
+- Hotspot-based gene module discovery
+- TF activity inference and regulatory network visualization (decoupler)
+- Cell-cell interaction prediction (LIANA)
 
 ---
 
 ## Preprocessing & Clustering
 
-This script filters, normalizes, and integrates AMP-PD snRNA-seq data using Scanpy and Pegasus. It applies HVG selection, PCA, Harmony batch correction, and Leiden clustering.
+**Script:** `prepare_and_integrate_AMPPD.py`  
+Performs HVG filtering, PCA, Harmony batch correction, and Leiden clustering using Scanpy and Pegasus.
 
 ### Run
 
@@ -44,7 +48,8 @@ python src/prepare_and_integrate_AMPPD.py
 
 ## GWAS Scoring with scDRS
 
-This script scores individual cells for Parkinson’s disease GWAS gene sets using the SCDRS method.
+**Script:** `score_gwas_scdrs.py`  
+Scores single cells using scDRS for prioritized Parkinson’s disease GWAS gene sets.
 
 ### Run
 
@@ -56,39 +61,31 @@ python src/score_gwas_scdrs.py
 
 ## Cell Type Compositional Analysis
 
-This module uses `crumblr` to analyze changes in subclass-level cell type proportions across Braak stages and diagnosis groups using pseudobulk counts.
+**Script:** `cell_type_composition.R`  
+Performs compositional modeling across subclasses using `crumblr` and `dream`, followed by meta-analysis with `metafor` and visualization via `ggtree`.
 
-### Script
+### Output
 
-- `cell_type_composition.R`
-
-### Highlights
-
-- Converts cell count matrices via `crumblr`
-- Runs mixed models with `dream` on cell proportions
-- Performs meta-analysis with `metafor`
-- Visualizes subclass shifts on hierarchical tree (`ggtree`)
+- Meta-analysis of compositional shifts
+- Coefficient plots annotated on hierarchical cell tree
 
 ---
 
 ## Differential Expression with dreamlet
 
-This script performs differential gene expression modeling across pseudobulk samples using `dreamlet`, adjusting for biological and technical covariates.
+**Script:** `dreamlet_differential_expression_PD.R`  
+Runs subclass-level pseudobulk DE using `dreamlet`. Includes models with and without ethnicity/participant covariates.
 
-### Script
+### Output
 
-- `dreamlet_differential_expression_PD.R`
-
-### Outputs
-
-- DE result tables (`.csv`)
-- Model objects (`.RData`)
+- DE results in `.csv` and `.RData`
 
 ---
 
-## Variance Partitioning of Braak LB Pathology
+## Variance Partitioning
 
-This script quantifies sources of variation (biological and technical) in gene expression across AMP-PD samples using `dreamlet::fitVarPart()`.
+**Script:** `variance_partition_braakLB_dreamlet.R`  
+Uses `dreamlet::fitVarPart()` to quantify gene expression variance explained by covariates including Braak LB stage.
 
 ### Run
 
@@ -98,29 +95,36 @@ Rscript scripts/variance_partition_braakLB_dreamlet.R
 
 ---
 
-## Hotspot Analysis of Myeloid Cells
+## Hotspot Module Detection
 
-This script applies `Hotspot` to identify locally co-regulated gene modules within microglia/PVM cells.
-
-### Workflow
-
-- Load Harmony-integrated AnnData file
-- Match with updated cell metadata
-- Run autocorrelation + module discovery
-- Export scores and modules
+**Script:** `hotspot_example.py`  
+Runs the Hotspot algorithm to detect local autocorrelated gene modules, focusing on myeloid cells.
 
 ### Run
 
 ```bash
-python src/hotspot_micro_pvm.py
+python src/hotspot_example.py
 ```
 
 ---
 
+## TF Activity Inference
 
-## CCI calling
+**Script:** `tf_inference.py`  
+Infers transcription factor activity per cell type using `decoupler` and CollecTRI network. Includes specificity scoring, normalized activity, and heatmap visualization.
 
-This script allows to infer CCIs.
+### Output
+
+- Normalized TF activity scores
+- TF specificity scores
+- Ranked TFs per subclass with heatmap
+
+---
+
+## Cell-Cell Interaction Inference
+
+**Script:** `run_cci_liana_example.py`  
+Uses the `LIANA` Python package to infer cell-cell interactions from integrated single-cell data.
 
 ### Run
 
@@ -128,19 +132,30 @@ This script allows to infer CCIs.
 python src/run_cci_liana_example.py
 ```
 
-
+---
 
 ## Installation & Requirements
 
-Most scripts require the following R and Python packages (via CRAN, Bioconductor, or pip):
+### Python (via pip)
 
-### Python (pip)
+The following packages are required and can be installed via pip:
 
 ```bash
-pip install scanpy pegasusio pegasuspy scdrs matplotlib seaborn pandas hotspotsc seaborn harmony anndata 
+pip install scanpy pegasuspy pegasusio anndata scdrs matplotlib seaborn pandas numpy \
+    decoupler liana igraph scikit-learn harmony-pytorch
 ```
 
-### R (Bioconductor + CRAN)
+Note:
+- `pegasuspy` and `pegasusio` are required for HDF5/AnnData processing
+- `harmony-pytorch` is used for batch correction
+- `decoupler` is used for TF activity inference
+- `liana` is used for CCI prediction
+
+---
+
+### R (via Bioconductor + CRAN)
+
+Use the following commands to install the required R packages:
 
 ```r
 # Bioconductor
@@ -154,3 +169,7 @@ install.packages(c(
   "ggplot2", "tidyverse", "aplot", "broom", "cowplot", "metafor", "reticulate"
 ))
 ```
+
+---
+
+
