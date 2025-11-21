@@ -18,7 +18,8 @@ This example assumes that you have already:
   - Assigned a class label (e.g., "leiden_res0_10_class"),
   - Saved one .h5ad file per class to disk.
 
-Author: (your name)
+Author: Tereza Clarence, Donghoon Lee
+
 """
 
 import argparse
