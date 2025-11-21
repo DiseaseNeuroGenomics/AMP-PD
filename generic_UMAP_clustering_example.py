@@ -20,7 +20,7 @@ This script assumes:
   - .var contains: gene_type, gene_chrom (chromosome annotation),
   - .obs contains: a batch key (e.g. "Brain_bank" or "Source").
 
-Author: Tereza Clarence
+Author: Tereza Clarence, Donghoon Lee
 
 ### Global clustering & UMAP
 
