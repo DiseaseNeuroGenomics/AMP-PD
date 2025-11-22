@@ -15,7 +15,6 @@ Outputs:
   2) TPS_donor.csv   (donor-level TPS: mean across cell types)
   3) Optional heatmap: TPS_heatmap.png
 
-Author: Tereza Clarence (+ ChatGPT helper)
 
 Example:
 python compute_tps.py \
