@@ -169,7 +169,6 @@ install.packages(c(
   "ggplot2", "tidyverse", "aplot", "broom", "cowplot", "metafor", "reticulate"
 ))
 ```
-
 Additional Python or R libraries can also be installed using the provided Conda environment files:
 
 ```bash
@@ -178,7 +177,7 @@ conda env create -f python_env.yml
 
 # R environment
 conda env create -f R_env.yml
-
+```
 ---
 
 
