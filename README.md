@@ -170,6 +170,15 @@ install.packages(c(
 ))
 ```
 
+Additional Python or R libraries can also be installed using the provided Conda environment files:
+
+```bash
+# Python environment
+conda env create -f python_env.yml
+
+# R environment
+conda env create -f R_env.yml
+
 ---
 
 
