@@ -151,7 +151,6 @@ Note:
 - `decoupler` is used for TF activity inference
 - `liana` is used for CCI prediction
 
----
 
 ### R (via Bioconductor + CRAN)
 
