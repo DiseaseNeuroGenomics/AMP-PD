@@ -330,4 +330,4 @@ dependencies:
       - xlrd==2.0.1
       - xlsxwriter==3.2.0
       - zarr==2.16.1
-prefix: /sc/arion/projects/CommonMind/jeremy/conda/envs/pegasusNov2024New
+
