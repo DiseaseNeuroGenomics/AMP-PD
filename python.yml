@@ -1,4 +1,4 @@
-name: pegasusNov2024New
+name: python_AMPPD
 channels:
   - conda-forge
   - defaults
