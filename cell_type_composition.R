@@ -49,7 +49,7 @@ suppressPackageStartupMessages({
 # --- Print Package Versions ---
 cat("Session package versions:\n")
 cat(paste0("dreamlet v", packageVersion("dreamlet")), "\n")
-cat(paste0("crumblr v", packageVersion("crumblr")), "\n")
+cat(paste0("crumblr v", packageVersion("crumblr")), "\n") ## crumblr v0.99.11 was applied
 cat(paste0("variancePartition v", packageVersion("variancePartition")), "\n")
 cat(paste0("zenith v", packageVersion("zenith")), "\n")
 cat(paste0("zellkonverter v", packageVersion("zellkonverter")), "\n")
